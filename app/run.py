@@ -1,13 +1,13 @@
 import json
 import plotly
 import pandas as pd
-
+import operator
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 
 from flask import Flask
 from flask import render_template, request, jsonify
-from plotly.graph_objs import Bar
+from plotly.graph_objs import Bar,Pie
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
 
@@ -43,6 +43,21 @@ def index():
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
     
+    col_val={}
+    y=df.iloc[:,4:]
+    for col in y:
+        val=0
+        if '1' in y[col].value_counts():
+            val=y[col].value_counts()[1]
+        if '2' in y[col].value_counts():
+            val+=y[col].value_counts()[2]
+        col_val[col]=val
+    col_val = sorted(col_val.items(), key=operator.itemgetter(1),reverse=True)
+
+    col_counts=[val[1] for val in col_val]
+    col_names=[val[0] for val in col_val]
+    
+
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
     graphs = [
@@ -62,6 +77,34 @@ def index():
                 'xaxis': {
                     'title': "Genre"
                 }
+            }
+        },
+         {
+            'data': [
+                Bar(
+                    y=col_counts,
+                    x=col_names,
+                )
+            ],
+
+            'layout': {
+                'title': 'Count of messages in each category',
+                'yaxis': {
+                    'title': "Count"
+                },
+            }
+        },
+        {
+            'data':[
+                Pie(
+                     labels=col_names,
+                     values=col_counts,
+                    textposition='inside'
+                )
+            ],
+            'layout':{
+                'title':' Percentage distribution of message in each category',
+                'orientation':'h'
             }
         }
     ]
