@@ -2,11 +2,13 @@ import json
 import plotly
 import pandas as pd
 import operator
+import string
+
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 
 from flask import Flask
-from flask import render_template, request, jsonify
+from flask import render_template, request
 from plotly.graph_objs import Bar,Pie
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
@@ -15,9 +17,24 @@ from sqlalchemy import create_engine
 app = Flask(__name__)
 
 def tokenize(text):
+    """Tokenize the given text.
+    Uses NLTK word_tokenize function to split the given text into words.
+    Uses WordNetLemmatizer of NLTK to convert the given list of words into their base form.
+    Removes punctuations from text
+    
+    Arguments:
+    text -- Each message in messages dataset
+    """
+    
+    # Remove punctuations
+    for key in string.punctuation:
+        text=text.replace(key,' ')
+        
+    # Initialize tokenizer and lemmatizer
     tokens = word_tokenize(text)
     lemmatizer = WordNetLemmatizer()
-
+    
+    #Tokenize and lemmatize the given text
     clean_tokens = []
     for tok in tokens:
         clean_tok = lemmatizer.lemmatize(tok).lower().strip()
@@ -37,9 +54,13 @@ model = joblib.load("../models/classifier.pkl")
 @app.route('/')
 @app.route('/index')
 def index():
+   """Renders landing page along with some analysis on training dataset
+    Extracts the data needed for visuals
+    Uses plotly for creating visuals
+    renders the template
+    """
     
-    # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
+    # extracting data needed for visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
     
@@ -58,10 +79,11 @@ def index():
     col_names=[val[0] for val in col_val]
     
 
-    # create visuals
-    # TODO: Below is an example - modify to create your own visuals
+    # creating visuals using plotly
     graphs = [
         {
+            # This bar plot is for knowing the distribution of messages with Genre 
+            
             'data': [
                 Bar(
                     x=genre_names,
@@ -79,6 +101,7 @@ def index():
                 }
             }
         },
+        # This bar plot is for knowing how messages spread across categories
          {
             'data': [
                 Bar(
@@ -94,6 +117,7 @@ def index():
                 },
             }
         },
+        # This pie plot is for knowing how messages relative spread across categories
         {
             'data':[
                 Pie(
@@ -120,6 +144,11 @@ def index():
 # web page that handles user query and displays model results
 @app.route('/go')
 def go():
+     """Renders results page along with classified labels
+    Saves user input in query
+    Uses model to predict classification for query
+    renders the template
+    """
     # save user input in query
     query = request.args.get('query', '') 
 
@@ -136,6 +165,10 @@ def go():
 
 
 def main():
+    """
+    Main function to start the server
+    Default port is 3001
+    """
     app.run(host='0.0.0.0', port=3001, debug=True)
 
 
