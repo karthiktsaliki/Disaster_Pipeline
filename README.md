@@ -23,7 +23,7 @@ https://github.com/karthiktsaliki/Disaster_Pipeline
 
 ### Motivation
 
-Generally, Creating pipeline automatically classifies the messages without human intervention. Let's dive in detail about the data in data understanding section.
+Generally, Creating pipeline automatically classifies the messages without human intervention.
 
 In the Project Workspace, you'll find a data set containing real messages that were sent during disaster events. Machine learning pipeline to categorize these events so that you can send the messages to an appropriate disaster relief agency.
 
@@ -31,11 +31,9 @@ This project will include a web app where an emergency worker can input a new me
 
 ### Datasets
 
-Categories: This data set is actually the classification of different messages in 36 categories
-               * These are few categories -- related, request, offer, aid_related, medical_help, medical_products, search_and_rescue
+Categories: This data set is actually the classification of different messages in 36 categories. These are few categories -- related, request, offer, aid_related, medical_help, medical_products, search_and_rescue
 
-messages: This data set consists the 26216 textual messages.
-           * Genre column indicate which genre each message belong to
+Messages: This data set consists the 26216 textual messages. Genre column indicate which genre each message belong to
 
 ### Project Components
 There are three components you'll need to complete for this project.
