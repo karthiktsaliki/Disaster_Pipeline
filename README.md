@@ -62,23 +62,23 @@ There are three components you'll need to complete for this project.
 
 This repository contains
 
-- app
-| - template
-| |- master.html  # main page of web app
-| |- go.html  # classification result page of web app
-|- run.py  # Flask file that runs app
+* app
+   * template
+      * master.html  # main page of web app
+      * go.html  # classification result page of web app
+   * run.py  # Flask file that runs app
 
-- data
-|- disaster_categories.csv  # data to process 
-|- disaster_messages.csv  # data to process
-|- process_data.py
-|- InsertDatabaseName.db   # database to save clean data to
+* data
+  * disaster_categories.csv  # data to process 
+  * disaster_messages.csv  # data to process
+  * process_data.py
+  * InsertDatabaseName.db   # database to save clean data to
 
-- models
-|- train_classifier.py
-|- classifier.pkl  # saved model 
+* models
+  * train_classifier.py
+  * classifier.pkl  # saved model 
 
-- README.md
+* README.md
 
 
 ### Results
